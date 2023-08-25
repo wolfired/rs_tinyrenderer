@@ -657,7 +657,7 @@ macro_rules! impl_matrix {
     };
 }
 impl_matrix!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64,);
-impl_matrix_eq!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+impl_matrix_eq!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize,);
 impl_vector_dot!(f32, f64,);
 impl_vector_cross!(f32, f64,);
 impl_vector_magnitude!(f32, f64,);

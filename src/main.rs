@@ -28,10 +28,6 @@ use rs_tinyrenderer::la::W;
 use rs_tinyrenderer::la::X;
 use rs_tinyrenderer::la::Y;
 use rs_tinyrenderer::la::Z;
-use rs_tinyrenderer::noise::fbm;
-use rs_tinyrenderer::noise::integer_noise_1d;
-use rs_tinyrenderer::noise::lerp_s;
-use rs_tinyrenderer::noise::perlin_noise_1d;
 use rs_tinyrenderer::obj::Obj;
 use rs_tinyrenderer::tga::TGACoord;
 use rs_tinyrenderer::tga::TGAImage;
@@ -39,87 +35,7 @@ use rs_tinyrenderer::tga::RED;
 use rs_tinyrenderer::tga::WHITE;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // sin_tga("./sin.tga")?;
-    // noise1d_tga("./noise1d.tga")?;
-    // perlin1d_tga("./perlin1d.tga")?;
     african_head("./african_head.obj", "./66666.tga")?;
-    Ok(())
-}
-
-fn sin_tga<P: AsRef<Path>>(tga_file: P) -> Result<(), Box<dyn Error>> {
-    let w = 600;
-    let h = 600;
-
-    let mut img = TGAImage::new(w, h);
-
-    let step = PI / 300.0;
-
-    let mut pre = Into::<_>::into([0, 300]);
-
-    for x in (0..w).step_by(1) {
-        let y = (x as f32 * step).sin();
-        let y = lerp_s(0.0, h as f32 - 1.0, (y + 1.0) / 2.0);
-
-        let cur = [x as i32, y as i32].into();
-
-        bresenham(pre, cur, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
-
-        pre = cur;
-    }
-
-    img.save(tga_file)?;
-
-    Ok(())
-}
-
-fn noise1d_tga<P: AsRef<Path>>(tga_file: P) -> Result<(), Box<dyn Error>> {
-    let w = 600;
-    let h = 600;
-
-    let mut img = TGAImage::new(w, h);
-
-    let step = 1.0f32;
-
-    let mut pre = Into::<_>::into([0, 0]);
-
-    for x in 0..w - 1 {
-        let y = integer_noise_1d((x as f32 * step * 0.125 / 4.0) as i32);
-        let y = lerp_s(0.0, h as f32 - 1.0, (y + 1.0) / 2.0);
-
-        let cur = [x as i32, y as i32].into();
-
-        bresenham(pre, cur, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
-
-        pre = cur;
-    }
-
-    img.save(tga_file)?;
-
-    Ok(())
-}
-
-fn perlin1d_tga<P: AsRef<Path>>(tga_file: P) -> Result<(), Box<dyn Error>> {
-    let w = 600;
-    let h = 600;
-
-    let mut img = TGAImage::new(w, h);
-
-    let step = 0.001;
-
-    let mut pre = Into::<_>::into([0, 300]);
-
-    for x in 0..w - 1 {
-        let y = fbm(x as f32 * step, 5);
-        let y = lerp_s(0.0, h as f32 - 1.0, (y + 1.0) / 2.0);
-
-        let cur = [x as i32, y as i32].into();
-
-        bresenham(pre, cur, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
-
-        pre = cur;
-    }
-
-    img.save(tga_file)?;
 
     Ok(())
 }
@@ -145,11 +61,11 @@ fn african_head<P: AsRef<Path>>(obj_file: P, tga_file: P) -> Result<(), Box<dyn 
         let p1 = vs[f.vs[1].vi - 1];
         let p2 = vs[f.vs[2].vi - 1];
 
-        bresenham(p0, p1, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
+        bresenham(p0, p1, |x, y| img.set_color([x as u16, y as u16].into(), WHITE.into()));
 
-        bresenham(p1, p2, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
+        bresenham(p1, p2, |x, y| img.set_color([x as u16, y as u16].into(), WHITE.into()));
 
-        bresenham(p2, p0, |x, y| img.set_color([x as u16, y as u16].into(), RED.into()));
+        bresenham(p2, p0, |x, y| img.set_color([x as u16, y as u16].into(), WHITE.into()));
     }
 
     img.save(tga_file)?;
